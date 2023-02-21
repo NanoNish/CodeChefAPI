@@ -13,8 +13,14 @@ app.get("/", (req, res) => {
 });
 
 app.get("/problem/:problemId", async (req, res) => {
-  var problemStatement = await problem(req.params.problemId);
-  res.send(problemStatement);
+  const temp = await problem(req.params.problemId);
+  const problemStatement = temp.problem;
+  const parsedProblem = temp.parsedProblem;
+  if (problemStatement == null) {
+    res.status(404).send("Problem not found");
+    return;
+  }
+  res.status(200).send(parsedProblem);
 });
 
 app.use("/api", api);
